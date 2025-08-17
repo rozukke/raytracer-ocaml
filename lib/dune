@@ -1,0 +1,4 @@
+(library
+ (name raytracer)
+ (libraries base)
+ (modules pixel vec v ray raytracer))
