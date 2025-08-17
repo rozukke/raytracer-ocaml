@@ -17,8 +17,8 @@
 
 (package
  (name raytracer)
- (synopsis "Raytracer in a weekend with OCaml.")
- (description "A way for me to quickly get used to the language by implementing 'Raytracing in a Weekend'.")
+ (synopsis "Ray Tracing in One Weekend with OCaml.")
+ (description "A way for me to quickly get used to the language by implementing 'Ray Tracing in One Weekend'.")
  (depends ocaml base)
  (tags (raytracing))
  )
