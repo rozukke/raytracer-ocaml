@@ -1,4 +1,4 @@
 (library
  (name raytracer)
  (libraries base)
- (modules vec ray raytracer camera))
+ (modules mod))
