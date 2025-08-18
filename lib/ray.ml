@@ -1,9 +1,7 @@
-open V
+open Vec
+open V.Types
 
-type point3 = Vec.vec3
-type vec3 = Vec.vec3
-
-type ray = { origin: point3; direction: vec3 }
+type ray = { origin: point; direction: vec3 }
 
 let ( @ ) ray step = V.(ray.origin +! (ray.direction *!. step))
 

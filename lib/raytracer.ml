@@ -1,5 +1,4 @@
-include V
-include Pixel
+include Ray
+include Vec
 
-type vec3 = Vec.vec3
-type color = vec3
+module Camera = Camera
