@@ -1,7 +1,6 @@
 open Vec
 open V.Types
 
-open struct
 type viewport = {
     _width: float;
     _height: float;
@@ -9,7 +8,6 @@ type viewport = {
     pixel_delta_v: vec3;
     topleft: point;
 }
-end
 
 type sensor = {
     width: int;
