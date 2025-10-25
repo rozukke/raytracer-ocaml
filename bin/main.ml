@@ -14,44 +14,30 @@ open V.Types
 let image_file = "out.ppm"
 
 
-(* Returns distance of intersection *)
-let ray_hit_sphere sphere_center radius (ray : ray) =
-    let orig_to_sphere = V.(sphere_center -! ray.origin) in
-    let a = V.lensq ray.direction in
-    let h = V.(ray.direction ^! orig_to_sphere) in
-    let c = Float.O.(V.lensq orig_to_sphere - (radius ** 2.)) in 
-    let discriminant = Float.O.(h ** 2. - a * c) in
-
-    if Float.O.(discriminant < 0.) then
-        -1.
-    else
-        Float.O.((h - Float.sqrt discriminant) / a)
-
-
-let ray_color (ray : ray) : color =
-    (* Check collision *)
-    let t = ray_hit_sphere {x=0.;y=0.;z= -1.} 0.5 ray in
-    if Float.O.(t > 0.) then
-        let n = V.(norm ((ray @ t) -! { x = 0.; y = 0.; z = -1.})) in
-        V.((n +!. 1.) *!. 0.5) 
-    else
-    (* Render background *)
+let background_color ray =
     let lightblue : color = { x = 0.5; y = 0.7; z = 1.0 } in
     let white : color = { x = 1.0; y = 1.0; z = 1.0 } in
     let norm_dir = V.norm ray.direction in
     (* Height of ray between top and bottom of frame as proportion of 1.0 *)
     let alpha = (norm_dir.y +. 1.) *. 0.5 in
     (* Lerp between white and blue depending on y height *)
-    V.(
-        white *!. (1.0 -. alpha) +! lightblue *!. alpha
-    )
+    V.(white *!. (1.0 -. alpha) +! lightblue *!. alpha)
+
+let ray_color ray =
+    (* Check collision *)
+    let sphere = Sphere { origin = (V.init 0. 0. (-1.)); radius = 0.5 } in
+    let hit = Surface.check_hit ray sphere in
+    match hit with
+    | Some t -> let normal = V.(norm ((ray @ t) -! { x = 0.; y = 0.; z = -1.})) in
+                V.((normal +!. 1.) *!. 0.5) 
+    | None -> background_color ray
 
 
 let () =
     let open Stdlib.Printf in
 
     let oc = Stdio.Out_channel.create image_file in
-    let camera = Camera.create 1280 1. (V.Consts.zero) in
+    let camera = Camera.create 1280 2. (V.Consts.zero) in
 
     (* Header *)
     fprintf oc "P3\n%d %d\n255\n" camera.sensor.width camera.sensor.height;
